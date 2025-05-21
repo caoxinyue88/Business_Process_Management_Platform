@@ -7,13 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
-interface BusinessFlowDetailProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function BusinessFlowDetail({ params }: BusinessFlowDetailProps) {
+// Define correct props interface for Next.js page component
+export default function BusinessFlowDetail({
+  params,
+  searchParams
+}: {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const { id } = params;
   const router = useRouter();
   const [businessFlow, setBusinessFlow] = useState<any>(null);
@@ -202,4 +203,4 @@ export default function BusinessFlowDetail({ params }: BusinessFlowDetailProps) 
       </Tab.Group>
     </div>
   );
-} 
+}

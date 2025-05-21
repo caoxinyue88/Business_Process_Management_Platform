@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../app/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Upload, Download, Search, Filter, X, AlertTriangle } from 'lucide-react';
-import PageHeader from '../../components/layout/PageHeader';
+import PageHeader from '@/components/layout/PageHeader';
 
 // Assistant item data structure definition
 interface AssistantItem {
@@ -35,11 +35,23 @@ const getAllLeafCategories = (items: AssistantItem[]): string[] => {
   return Array.from(new Set(categories)).sort(); // Unique and sorted
 };
 
-export default function AssistantPage() {
+// Loading component
+function AssistantPageLoading() {
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <div className="text-center">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+        <p className="mt-2 text-gray-500">正在加载助理页面...</p>
+      </div>
+    </div>
+  );
+}
+
+function AssistantPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const categoryParam = searchParams.get('category');
-  const subcategoryParam = searchParams.get('subcategory');
+  const categoryParam = searchParams?.get('category');
+  const subcategoryParam = searchParams?.get('subcategory');
 
   const [assistantItems, setAssistantItems] = useState<AssistantItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -829,5 +841,13 @@ export default function AssistantPage() {
         </div>
       )}
     </>
+  );
+}
+
+export default function AssistantPage() {
+  return (
+    <Suspense fallback={<AssistantPageLoading />}>
+      <AssistantPageContent />
+    </Suspense>
   );
 } 

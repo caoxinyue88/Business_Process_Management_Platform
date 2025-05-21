@@ -1,17 +1,29 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import ProcessTypeModal from '@/app/components/modals/ProcessTypeModal';
-import ProcessDesigner from '@/app/components/flow/ProcessDesigner';
+import ProcessTypeModal from '../../../components/modals/ProcessTypeModal';
+import ProcessDesigner from '../../../components/flow/ProcessDesigner';
 
-export default function ProcessPage() {
+// Loading component
+function ProcessPageLoading() {
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <div className="text-center">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+        <p className="mt-2 text-gray-500">正在加载流程设计器...</p>
+      </div>
+    </div>
+  );
+}
+
+function ProcessPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  const flowId = searchParams.get('flowId');
-  const businessFlowId = searchParams.get('businessFlowId') || '';
-  const defaultType = searchParams.get('defaultType') as 'project' | 'approval' | null;
+  const flowId = searchParams?.get('flowId');
+  const businessFlowId = searchParams?.get('businessFlowId') || '';
+  const defaultType = searchParams?.get('defaultType') as 'project' | 'approval' | null;
   const [processType, setProcessType] = useState<'project' | 'approval' | null>(defaultType);
   const [showTypeModal, setShowTypeModal] = useState(!flowId && !defaultType);
   const [loading, setLoading] = useState(false);
@@ -111,5 +123,13 @@ export default function ProcessPage() {
         </div>
       )}
     </>
+  );
+}
+
+export default function ProcessPage() {
+  return (
+    <Suspense fallback={<ProcessPageLoading />}>
+      <ProcessPageContent />
+    </Suspense>
   );
 } 

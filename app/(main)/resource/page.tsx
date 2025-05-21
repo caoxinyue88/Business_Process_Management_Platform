@@ -1,14 +1,26 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { 
   Plus, Search, Filter, Download, MoreHorizontal, 
   Edit, Trash, Copy, Eye, Clock, Upload, X, AlertTriangle
 } from 'lucide-react';
-import PageHeader from '../../components/layout/PageHeader';
-import { Resource } from '../../types/resource';
+import PageHeader from '@/components/layout/PageHeader';
+import { Resource } from '@/types/resource';
 
-export default function ResourcePage() {
+// Create a loading component
+function ResourcePageLoading() {
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <div className="text-center">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+        <p className="mt-2 text-gray-500">正在加载资源页面...</p>
+      </div>
+    </div>
+  );
+}
+
+function ResourcePageContent() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -693,5 +705,13 @@ export default function ResourcePage() {
         </div>
       )}
     </>
+  );
+}
+
+export default function ResourcePage() {
+  return (
+    <Suspense fallback={<ResourcePageLoading />}>
+      <ResourcePageContent />
+    </Suspense>
   );
 } 

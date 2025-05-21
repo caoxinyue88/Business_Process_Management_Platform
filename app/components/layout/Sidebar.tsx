@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useEffect, MouseEvent as ReactMouseEvent } from 'react';
+import { useState, useEffect, MouseEvent as ReactMouseEvent, createRef, Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { 
   Workflow, LayoutDashboard, UsersRound, FolderKanban, Library, 
   BookMarked, Globe2, LifeBuoy, Settings2, ChevronDown, ChevronUp, Menu, FileText, Tag, List, CornerDownRight, PlusCircle
 } from 'lucide-react';
-import ContextMenu from '../../../app/components/ui/ContextMenu';
-import BusinessFlowModal from '../../../app/components/modals/BusinessFlowModal';
+import ContextMenu from '../../ui/ContextMenu';
+import BusinessFlowModal from '../../modals/BusinessFlowModal';
 import { useRouter } from 'next/navigation';
 
-// Interfaces for data types
+// Interfaces
 interface BusinessFlowItem {
   id: string;
   name: string;
@@ -24,7 +24,6 @@ interface BusinessFlowItem {
   lastAccessed?: string;
 }
 
-// Define type for sidebar navigation links that can have children
 interface NavLinkItem {
   name: string;
   icon: React.ElementType;
@@ -45,37 +44,32 @@ interface ContextMenuState {
 
 interface ModalState {
   isOpen: boolean;
-  mode: 'add' | 'edit' | 'addSub'; // 'addSub' for adding a sub-item
-  parentId?: string | null; // For adding sub-items
+  mode: 'add' | 'edit' | 'addSub';
+  parentId?: string | null;
   initialName?: string;
   initialDescription?: string;
-  flowId?: string; // For editing
+  flowId?: string;
   title?: string;
 }
 
-// Default data for cases when API is not yet available
+// Default data
 const defaultBusinessFlows: BusinessFlowItem[] = [
-    { 
+  { 
     id: 'bf-Beta',
-      name: '客服机器人Beta', 
-      detailPageId: 'digitalEmployeeDetailPage_Beta', 
-      description: '职责：处理客户常见问题，提供7x24小时支持。', 
-      projects: 1, 
-      resources: 1, 
+    name: '客服机器人Beta', 
+    detailPageId: 'digitalEmployeeDetailPage_Beta', 
+    description: '职责：处理客户常见问题，提供7x24小时支持。', 
+    projects: 1, 
+    resources: 1, 
     lastAccessed: '昨天',
     children: []
-    }
+  }
 ];
 
-const defaultSidebarWebsiteLinks: NavLinkItem[] = [
-  // Empty array - no subitems
-];
+const defaultSidebarWebsiteLinks: NavLinkItem[] = [];
+const defaultSidebarAssistantLinks: NavLinkItem[] = [];
 
-const defaultSidebarAssistantLinks: NavLinkItem[] = [
-  // Empty array - no subitems
-];
-
-// Helper to convert string icon names to actual components
+// Helper function
 const getIconComponent = (iconName: string): React.ElementType => {
   switch (iconName) {
     case 'List': return List;
@@ -85,15 +79,31 @@ const getIconComponent = (iconName: string): React.ElementType => {
   }
 };
 
-// Define website hierarchy for sidebar
-const websiteHierarchy = {
-  parentCategories: {},
-  leafCategories: []
-};
+// Loading component
+function SidebarLoading() {
+  return (
+    <div className="sidebar text-gray-300 p-4 space-y-6 flex flex-col fixed h-full z-30 shadow-lg animate-pulse">
+      <div className="flex items-center justify-between mb-4">
+        <div className="h-8 w-32 bg-gray-600 rounded"></div>
+      </div>
+      <div className="flex-grow space-y-4">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="h-8 bg-gray-600 rounded w-full"></div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-export default function Sidebar() {
+// This component uses hooks that require client components
+function SidebarWithParams() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  const categoryParam = searchParams?.get('category');
+  const subcategoryParam = searchParams?.get('subcategory');
+  
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -114,8 +124,6 @@ export default function Sidebar() {
   const [businessFlowModalState, setBusinessFlowModalState] = useState<ModalState>({
     isOpen: false, mode: 'add', parentId: null,
   });
-
-  const router = useRouter();
 
   // Add back the useEffect hook
   useEffect(() => {
@@ -293,8 +301,6 @@ export default function Sidebar() {
       case 'businessFlow':
         return [
           { label: '添加子业务流', action: () => openAddSubBusinessFlowModal(contextMenu.targetId!) },
-          // { label: '编辑业务流', action: () => { /* openEditBusinessFlowModal(contextMenu.targetId) */ } },
-          // { label: '删除业务流', action: () => { /* handleDeleteBusinessFlow(contextMenu.targetId) */ } },
         ];
       case 'websiteCategory':
         return [
@@ -399,15 +405,12 @@ export default function Sidebar() {
       }
 
       let isActive = false;
-      const queryCategory = searchParams.get('category');
-      const querySubCategory = searchParams.get('subcategory');
-
-      if (sectionIdentifier === 'websites') {
-        isActive = queryCategory === parentNameForQuery &&
-                   (item.parentId ? querySubCategory === currentItemNameForQuery : !querySubCategory);
-      } else if (sectionIdentifier === 'assistant') {
-        isActive = pathname === '/assistant' && queryCategory === parentNameForQuery &&
-                   (item.parentId ? querySubCategory === currentItemNameForQuery : !querySubCategory);
+      if (categoryParam && sectionIdentifier === 'websites') {
+        isActive = categoryParam === parentNameForQuery &&
+                   (item.parentId ? subcategoryParam === currentItemNameForQuery : !subcategoryParam);
+      } else if (categoryParam && sectionIdentifier === 'assistant') {
+        isActive = pathname === '/assistant' && categoryParam === parentNameForQuery &&
+                   (item.parentId ? subcategoryParam === currentItemNameForQuery : !subcategoryParam);
       }
 
       return (
@@ -635,3 +638,15 @@ export default function Sidebar() {
     </>
   );
 }
+
+function SidebarContent() {
+  return (
+    <Suspense fallback={<SidebarLoading />}>
+      <SidebarWithParams />
+    </Suspense>
+  );
+}
+
+export default function Sidebar() {
+  return <SidebarContent />;
+} 

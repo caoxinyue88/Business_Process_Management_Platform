@@ -1,0 +1,12 @@
+{
+  "/api/feishu/websites/route": "app/api/feishu/websites/route.js",
+  "/api/feishu/projects/route": "app/api/feishu/projects/route.js",
+  "/api/feishu/websites/batch/route": "app/api/feishu/websites/batch/route.js",
+  "/api/feishu/assistant/route": "app/api/feishu/assistant/route.js",
+  "/api/feishu/business-flows/route": "app/api/feishu/business-flows/route.js",
+  "/(main)/dashboard/page": "app/(main)/dashboard/page.js",
+  "/(main)/business-flow/process/page": "app/(main)/business-flow/process/page.js",
+  "/(main)/project/page": "app/(main)/project/page.js",
+  "/(main)/assistant/page": "app/(main)/assistant/page.js",
+  "/(main)/websites/page": "app/(main)/websites/page.js"
+}

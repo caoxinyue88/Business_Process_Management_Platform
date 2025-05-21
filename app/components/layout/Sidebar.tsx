@@ -7,8 +7,8 @@ import {
   Workflow, LayoutDashboard, UsersRound, FolderKanban, Library, 
   BookMarked, Globe2, LifeBuoy, Settings2, ChevronDown, ChevronUp, Menu, FileText, Tag, List, CornerDownRight, PlusCircle
 } from 'lucide-react';
-import ContextMenu from '../../ui/ContextMenu';
-import BusinessFlowModal from '../../modals/BusinessFlowModal';
+import ContextMenu from '../ui/ContextMenu';
+import BusinessFlowModal from '../modals/BusinessFlowModal';
 import { useRouter } from 'next/navigation';
 
 // Interfaces

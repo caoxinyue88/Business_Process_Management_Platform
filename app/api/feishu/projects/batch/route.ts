@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { batchCreateProjects } from '@/app/lib/localStorageService';
-import { Project } from '@/app/types/project';
+import { getProjectsFromFile, saveProjectsToFile } from '../../../../lib/fileSystemService';
+import { Project } from '../../../../types/project';
 
 export async function POST(request: Request) {
   try {
@@ -16,9 +16,19 @@ export async function POST(request: Request) {
       );
     }
     
-    console.log('Calling batchCreateProjects with data:', projectsData);
     try {
-      const newProjects = await batchCreateProjects(projectsData);
+      // Get existing projects
+      const projects = await getProjectsFromFile();
+      
+      // Generate IDs for new projects
+      const newProjects = projectsData.map(project => ({
+        ...project,
+        id: `P${Date.now()}_${Math.floor(Math.random() * 10000)}`
+      }));
+      
+      // Save all projects (existing + new)
+      await saveProjectsToFile([...projects, ...newProjects]);
+      
       console.log('Created projects:', newProjects);
       
       return NextResponse.json(

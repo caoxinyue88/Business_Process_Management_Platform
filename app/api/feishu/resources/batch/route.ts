@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { batchCreateResources } from '@/app/lib/localStorageService';
-import { Resource } from '@/app/types/resource';
+import { getResourcesFromFile, saveResourcesToFile } from '../../../../lib/fileSystemService';
+import { Resource } from '../../../../types/resource';
 
 export async function POST(request: Request) {
   try {
@@ -16,9 +16,19 @@ export async function POST(request: Request) {
       );
     }
     
-    console.log('Calling batchCreateResources with data:', resourcesData);
     try {
-      const newResources = await batchCreateResources(resourcesData);
+      // Get existing resources
+      const resources = await getResourcesFromFile();
+      
+      // Generate IDs for new resources
+      const newResources = resourcesData.map(resource => ({
+        ...resource,
+        id: `R${Date.now()}_${Math.floor(Math.random() * 10000)}`
+      }));
+      
+      // Save all resources (existing + new)
+      await saveResourcesToFile([...resources, ...newResources]);
+      
       console.log('Created resources:', newResources);
       
       return NextResponse.json(

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { batchCreateAssistantItems } from '../../../../../app/lib/localStorageService';
-import { AssistantItem } from '../../../../../app/types/assistant';
+import { getAssistantItemsFromFile, saveAssistantItemsToFile } from '../../../../lib/fileSystemService';
+import { AssistantItem } from '../../../../types/assistant';
 
 export async function POST(request: Request) {
   try {
@@ -15,8 +15,17 @@ export async function POST(request: Request) {
       );
     }
     
-    // Call the batch create function
-    const newAssistantItems = await batchCreateAssistantItems(data);
+    // Get existing assistant items
+    const items = await getAssistantItemsFromFile();
+    
+    // Generate IDs for new assistant items
+    const newAssistantItems = data.map(item => ({
+      ...item,
+      id: `AI${Date.now()}${Math.floor(Math.random() * 1000)}`
+    }));
+    
+    // Save all assistant items (existing + new)
+    await saveAssistantItemsToFile([...items, ...newAssistantItems]);
     
     // Return the newly created assistant items
     return NextResponse.json(

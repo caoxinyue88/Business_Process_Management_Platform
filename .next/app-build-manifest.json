@@ -11,15 +11,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(main)/layout.js"
     ],
-    "/(main)/assistant/layout": [
+    "/(main)/websites/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(main)/assistant/layout.js"
+      "static/chunks/app/(main)/websites/layout.js"
     ],
-    "/(main)/assistant/page": [
+    "/(main)/websites/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(main)/assistant/page.js"
+      "static/chunks/app/(main)/websites/page.js"
     ],
     "/api/feishu/business-flows/route": [
       "static/chunks/webpack.js",
@@ -36,35 +36,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/feishu/assistant/route.js"
     ],
-    "/(main)/websites/layout": [
+    "/(main)/resource/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(main)/websites/layout.js"
+      "static/chunks/app/(main)/resource/page.js"
     ],
-    "/(main)/websites/page": [
+    "/api/feishu/resources/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(main)/websites/page.js"
-    ],
-    "/(main)/project/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(main)/project/page.js"
-    ],
-    "/api/feishu/projects/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/feishu/projects/route.js"
-    ],
-    "/(main)/business-flow/process/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(main)/business-flow/process/page.js"
-    ],
-    "/(main)/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(main)/dashboard/page.js"
+      "static/chunks/app/api/feishu/resources/route.js"
     ],
     "/api/feishu/websites/batch/route": [
       "static/chunks/webpack.js",

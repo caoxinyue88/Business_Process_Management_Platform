@@ -145,7 +145,7 @@ export default function BusinessFlowDetail({ params }: BusinessFlowDetailProps) 
               
               {processes.length === 0 ? (
                 <div className="bg-gray-50 rounded-md p-8 text-center">
-                  <p className="text-gray-500 mb-4">暂无流程，点击"添加流程"开始创建</p>
+                  <p className="text-gray-500 mb-4">暂无流程，点击&quot;添加流程&quot;开始创建</p>
                   <Button 
                     onClick={handleAddProcess}
                     className="flex items-center mx-auto"

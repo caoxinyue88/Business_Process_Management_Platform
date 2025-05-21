@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { batchCreateWebsites } from '../../../../../app/lib/localStorageService';
-import { Website } from '../../../../../app/types/website';
+import { getWebsitesFromFile, saveWebsitesToFile } from '../../../../lib/fileSystemService';
+import { Website } from '../../../../types/website';
 
 export async function POST(request: Request) {
   try {
@@ -15,8 +15,17 @@ export async function POST(request: Request) {
       );
     }
     
-    // Call the batch create function
-    const newWebsites = await batchCreateWebsites(data);
+    // Get existing websites
+    const websites = await getWebsitesFromFile();
+    
+    // Generate IDs for new websites
+    const newWebsites = data.map(item => ({
+      ...item,
+      id: `web-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+    }));
+    
+    // Save all websites (existing + new)
+    await saveWebsitesToFile([...websites, ...newWebsites]);
     
     // Return the newly created websites
     return NextResponse.json(

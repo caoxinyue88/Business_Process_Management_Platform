@@ -230,7 +230,7 @@ export const batchCreateBusinessFlows = async (
   
   initializeLocalStorage(); // Ensure storage is initialized
   
-  let allFlows = await getBusinessFlows();
+  const allFlows = await getBusinessFlows();
   const createdFlows: BusinessFlow[] = [];
 
   for (const item of flowItems) {

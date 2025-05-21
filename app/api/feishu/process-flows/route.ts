@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 // Mock data storage since we don't have a real database connection yet
-let processFlows: any[] = [];
+const processFlows: any[] = [];
 
 // GET all process flows or a specific one by ID
 export async function GET(req: Request) {

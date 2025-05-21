@@ -317,7 +317,7 @@ export default function Sidebar() {
 
       let pathSuffix = '';
       if (level > 0 && flow.parentId) {
-          let current = flow;
+          const current = flow;
           let path = current.id.substring(current.parentId!.length + 1);
           let parent = findNestedFlow(businessFlows, current.parentId!)
           while(parent && parent.parentId) {
@@ -506,8 +506,8 @@ export default function Sidebar() {
           
           <li>
             <div className='nav-section'>
-              <button 
-                className='nav-section-toggle nav-item-container w-full flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-700 hover:text-white'
+              <div 
+                className='nav-section-toggle nav-item-container w-full flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-slate-700 hover:text-white cursor-pointer'
                 onClick={() => toggleSection('businessFlow')}
               >
                 <div className='flex items-center space-x-3'>
@@ -529,12 +529,14 @@ export default function Sidebar() {
                   >
                     <PlusCircle className="w-4 h-4" />
                   </button>
-                  {expandedSections.businessFlow ? 
-                    <ChevronUp className='sidebar-text w-4 h-4' /> : 
-                    <ChevronDown className='sidebar-text w-4 h-4' />
-                  }
+                  <span onClick={(e) => e.stopPropagation()}>
+                    {expandedSections.businessFlow ? 
+                      <ChevronUp className='sidebar-text w-4 h-4' /> : 
+                      <ChevronDown className='sidebar-text w-4 h-4' />
+                    }
+                  </span>
                 </div>
-              </button>
+              </div>
               <ul className={`nav-section-content ml-3 mt-1 space-y-1 border-l-2 border-slate-700 pl-4 ${
                 expandedSections.businessFlow ? '' : 'hidden'
               }`}>

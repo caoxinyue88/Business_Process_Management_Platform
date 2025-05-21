@@ -227,8 +227,8 @@ export default function ProcessDesigner({
       return;
     }
 
-    let nodesToRemove = [nodeId];
-    let connectionsToRemove: string[] = [];
+    const nodesToRemove = [nodeId];
+    const connectionsToRemove: string[] = [];
 
     if (nodeToDelete.type === 'decision') {
       // Find direct children of the decision node (branch nodes)
@@ -788,7 +788,7 @@ export default function ProcessDesigner({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>
-              编辑 "{selectedNode?.label || '节点'}"
+              编辑 &quot;{selectedNode?.label || '节点'}&quot;
             </DialogTitle>
           </DialogHeader>
           

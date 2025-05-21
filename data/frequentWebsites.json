@@ -5,5 +5,19 @@
     "description": "11",
     "url": "11",
     "id": "web-1747847025014-vzp3bdd"
+  },
+  {
+    "category": "宏观资讯",
+    "name": "数据分析平台",
+    "description": "提供详细的数据分析服务",
+    "url": "https://example.com/data-analysis",
+    "id": "web-1747848909010-27748iu"
+  },
+  {
+    "category": "企业资讯",
+    "name": "企业监控系统",
+    "description": "实时监控企业动态",
+    "url": "https://example.com/company-monitor",
+    "id": "web-1747848909010-ob8vwmm"
   }
 ]
